@@ -92,24 +92,29 @@ class _GridGorunumState extends State<GridGorunum> {
                       //color: Colors.brown.shade100,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              tumnotlar[index].notBaslik,
-                              style:
-                                  TextStyle(fontFamily: "Baslik", fontSize: 20,color: Colors.red),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 10, bottom: 20),
-                              child: Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    tumnotlar[index].notIcerik,
-                                    style: TextStyle(fontSize: 20,fontFamily: "Icerik"),
-                                  )),
-                            ),
-                          ],
+                        child: InkWell(
+                          onLongPress: (){
+                            notsil(tumnotlar[index].notId);
+                          },
+                          child: Column(
+                            children: [
+                              Text(
+                                tumnotlar[index].notBaslik,
+                                style:
+                                    TextStyle(fontFamily: "Baslik", fontSize: 20,color: Colors.red),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 20),
+                                child: Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      tumnotlar[index].notIcerik,
+                                      style: TextStyle(fontSize: 20,fontFamily: "Icerik"),
+                                    )),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -128,7 +133,7 @@ class _GridGorunumState extends State<GridGorunum> {
             }));
   }
 
-  /*void _notsil(int notId) {
+   _notsil(int notId) {
     showDialog(
         context: context,
         builder: (context) {
@@ -185,7 +190,7 @@ class _GridGorunumState extends State<GridGorunum> {
             ),
           );
         });
-  }*/
+  }
 
   giris() {
     return ListView(
@@ -236,6 +241,65 @@ class _GridGorunumState extends State<GridGorunum> {
         )
       ],
     );
+  }
+
+  void notsil(int notId) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Not Sil",
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.blueGrey,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Notu Silmek Istediginize Eminmisiniz"),
+                ButtonBar(
+                  children: [
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        "IPTAL",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        databasehelper.notSil(notId).then((value) {
+                          if (value != 0) {
+                            scaffold_key.currentState.showSnackBar(SnackBar(
+                                content: Text("Not Başarıyla silindi")));
+                            setState(() {
+                              Navigator.of(context).pop();
+                            });
+                          }
+                        });
+                      },
+                      child: Text(
+                        "SIL",
+                        style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                          fontSize: 20,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
 
