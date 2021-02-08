@@ -56,7 +56,8 @@ class _NotEkleSayfasiState extends State<NotEkleSayfasi> {
     return Scaffold(
       key: _scafoldkey,
       appBar: AppBar(
-        title: Text(widget.baslik),
+        title: notHeader(),
+        backgroundColor: Colors.white70,
         actions: [
           PopupMenuButton(
             itemBuilder: (context) {
@@ -67,7 +68,7 @@ class _NotEkleSayfasiState extends State<NotEkleSayfasi> {
                     title: Text("Kategorileri Görüntüle"),
                     onTap: () {
                       Navigator.pop(context);
-                       kategorilerSayfasinaGit(context);
+                      kategorilerSayfasinaGit(context);
                     },
                   ),
                 ),
@@ -85,6 +86,7 @@ class _NotEkleSayfasiState extends State<NotEkleSayfasi> {
               child: Form(
                 key: key,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       padding:
@@ -191,7 +193,7 @@ class _NotEkleSayfasiState extends State<NotEkleSayfasi> {
                           child: Text(
                             "VAZGEÇ",
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ),
                         FlatButton(
@@ -212,7 +214,8 @@ class _NotEkleSayfasiState extends State<NotEkleSayfasi> {
                                       debugPrint("$tarih");
                                       debugPrint(
                                           databaseHelper.dateFormat(tarih));
-                                      Navigator.pop(context);
+                                      Navigator.of(context).pop();
+
                                       //pop yap
                                     }
                                   });
@@ -236,7 +239,7 @@ class _NotEkleSayfasiState extends State<NotEkleSayfasi> {
                             child: Text(
                               "KAYDET",
                               style: TextStyle(
-                                  fontSize: 15,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.green),
                             ))
@@ -330,9 +333,13 @@ class _NotEkleSayfasiState extends State<NotEkleSayfasi> {
                               duration: Duration(seconds: 2),
                             ));
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyHomePage()));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NotEkleSayfasi(
+                                  baslik: widget.baslik,
+                                ),
+                              ),
+                            );
                           }
                         });
                       }
@@ -352,8 +359,27 @@ class _NotEkleSayfasiState extends State<NotEkleSayfasi> {
         });
   }
 
-  kategorilerSayfasinaGit(BuildContext  context) {
+  kategorilerSayfasinaGit(BuildContext context) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => KategorilerSayfasi()));
+  }
+
+  notHeader() {
+    return Padding(
+      padding: EdgeInsets.only(top: 10, left: 2.5, right: 2.5),
+      child: Column(
+        children: [
+          Text(
+            widget.baslik,
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
+              fontFamily: "Baslik",
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

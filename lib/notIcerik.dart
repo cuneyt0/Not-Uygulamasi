@@ -32,10 +32,23 @@ class _NotIcerikState extends State<NotIcerik> {
         title: Text("Not Icerik"),
       ),
       body: Container(
-        child: Text(not.notIcerik,style: TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
-        ),),
+        width:MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: Colors.blueGrey,
+        child: Container(
+          alignment: Alignment.topLeft,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(not.notIcerik,style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,fontFamily: "Icerik"
+                ),),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
