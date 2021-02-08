@@ -29,14 +29,8 @@ class _GridGorunumState extends State<GridGorunum> {
 
   @override
   Widget build(BuildContext context) {
-    /* if (tumnotlar == null) {
-      setState(() {
-        tumnotlar = List<Notlar>();
-
-        notIceriginiGetir();
-      });
-    }*/
     return Scaffold(
+        resizeToAvoidBottomPadding: false,
         key: scaffold_key,
         appBar: AppBar(
           title: notHeader(),
@@ -67,9 +61,7 @@ class _GridGorunumState extends State<GridGorunum> {
                       builder: (context) => NotEkleSayfasi(
                             baslik: "Yeni Not",
                           ))).then((value) {
-                setState(() {
-
-                });
+                setState(() {});
               });
             },
             child: Icon(Icons.add)),
@@ -79,55 +71,50 @@ class _GridGorunumState extends State<GridGorunum> {
               if (snapShot.data.isNotEmpty &&
                   snapShot.connectionState == ConnectionState.done) {
                 tumnotlar = snapShot.data;
-                return GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisSpacing: 5, crossAxisCount: 2),
+                return StaggeredGridView.countBuilder(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 8.0,
                   itemCount: tumnotlar.length,
                   itemBuilder: (context, index) {
-                    return Card(
-
-                      elevation: 50,
-                      color: Colors.brown.shade400,
-                      child: GestureDetector(
-                        onLongPress: () {
-                          _notsil(tumnotlar[index].notId);
-                        },
-                        child: SingleChildScrollView(
-                          child: Container(
-                            alignment: Alignment.topLeft,
-                            child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-
-                              children: [
-                                Center(
-                                  child: Text(
-                                    tumnotlar[index].notBaslik.toUpperCase(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      fontFamily: "Baslik",
-                                      //decoration: TextDecoration.underline,
-                                    ),
-
-
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 5),
+                    return Container(
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.brown.withOpacity(0.1),
+                                spreadRadius: 9,
+                                blurRadius: 7,
+                                offset: Offset(0, 3)),
+                          ],
+                          color: Colors.pink.shade100,
+                          borderRadius: BorderRadius.circular(5)),
+                      margin: EdgeInsets.all(5.0),
+                      //color: Colors.brown.shade100,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              tumnotlar[index].notBaslik,
+                              style:
+                                  TextStyle(fontFamily: "Baslik", fontSize: 20,color: Colors.red),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 20),
+                              child: Container(
+                                  alignment: Alignment.topLeft,
                                   child: Text(
                                     tumnotlar[index].notIcerik,
-                                    style: TextStyle(
-                                        fontSize: 20, fontFamily: 'Icerik'),
-                                  ),
-                                ),
-                              ],
+                                    style: TextStyle(fontSize: 20,fontFamily: "Icerik"),
+                                  )),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     );
                   },
+                  staggeredTileBuilder: (index) => StaggeredTile.fit(1),
                 );
               } else if (snapShot.data.isEmpty) {
                 return Center(
@@ -141,15 +128,7 @@ class _GridGorunumState extends State<GridGorunum> {
             }));
   }
 
- /* notIceriginiGetir() {
-    databasehelper.notlariIcerenListe().then((value) {
-      setState(() {
-        tumnotlar = value;
-      });
-    });
-  }*/
-
-  void _notsil(int notId) {
+  /*void _notsil(int notId) {
     showDialog(
         context: context,
         builder: (context) {
@@ -206,7 +185,7 @@ class _GridGorunumState extends State<GridGorunum> {
             ),
           );
         });
-  }
+  }*/
 
   giris() {
     return ListView(
@@ -227,21 +206,31 @@ class _GridGorunumState extends State<GridGorunum> {
               padding: const EdgeInsets.only(top: 50),
               child: RichText(
                   text: TextSpan(children: [
-                    TextSpan(
-                        text: "       Notunuz bulunmamaktadır\n\nTuşa basarak",
-                        style: TextStyle(color: Colors.black,fontSize: 25,fontFamily: "Icerik")),
-                    TextSpan(
-                        text: " +",
-                        style: TextStyle(color: Colors.blue, fontSize: 30),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>NotEkleSayfasi(baslik: "Yeni Not",)));
-
-                          }),
-                    TextSpan(
-                        text: " not ekleyebilirsiniz",
-                        style: TextStyle(color: Colors.black,fontSize: 25,fontFamily: "Icerik")),
-                  ])),
+                TextSpan(
+                    text: "       Notunuz bulunmamaktadır\n\nTuşa basarak",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 25,
+                        fontFamily: "Icerik")),
+                TextSpan(
+                    text: " +",
+                    style: TextStyle(color: Colors.blue, fontSize: 30),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NotEkleSayfasi(
+                                      baslik: "Yeni Not",
+                                    )));
+                      }),
+                TextSpan(
+                    text: " not ekleyebilirsiniz",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 25,
+                        fontFamily: "Icerik")),
+              ])),
             )
           ],
         )
@@ -249,6 +238,7 @@ class _GridGorunumState extends State<GridGorunum> {
     );
   }
 }
+
 Widget notHeader() {
   return Padding(
     padding: EdgeInsets.only(top: 10, left: 2.5, right: 2.5),
